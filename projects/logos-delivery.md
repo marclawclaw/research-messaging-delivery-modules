@@ -9,7 +9,7 @@ updated: 2026-04-10
 **Type:** Core transport layer
 **GitHub:** https://github.com/logos-messaging/logos-delivery
 **Stars:** 240
-**Last updated:** 2026-04-09
+**Last updated:** 2026-04-10
 
 ## Overview
 
@@ -32,21 +32,36 @@ logos-delivery (Nim)
     └── liblogosdelivery (C library)  ← used by logos-delivery-module
 ```
 
-## C FFI Status
+## C FFI Library
 
-The C library export (`liblogosdelivery.dylib` / `.so`) is the blocking dependency for [[logos-delivery-module]].
+**Available.** The flake exposes `liblogosdelivery` as a package output:
 
-Current status (per [[logos-delivery-module]] README): *"compiles but fails at install phase — liblogosdelivery.dylib not yet available from logos-delivery"*.
+```bash
+# Build the C library
+nix build github:logos-messaging/logos-delivery
 
-The `logos-delivery` README does not currently document a `make lib` or equivalent target for C library export. This step needs to be added to `logos-delivery`.
+# Or explicitly
+nix build github:logos-messaging/logos-delivery/.#liblogosdelivery
+
+# Available on: x86_64-linux, aarch64-linux, x86_64-darwin, aarch64-darwin, x86_64-windows
+```
+
+The `logos-delivery` README does not document this target — the Nix flake (`flake.nix`) is the authoritative source.
+
+Recent commits (2026-04-10):
+- "Fix BearSSL and NAT lib build reproducibility" — 2026-04-10
+- "fix: recv_service delivers store-recovered messages" — 2026-04-09
+- "add main loop lag monitor" — 2026-04-09
 
 ## Readiness
 
 **Status:** Production-grade
-**Blocking issues:** C library export not yet published
+**C FFI available:** Yes (via Nix)
+**Blocking issues:** None — confirmed ready by dev team (2026-04-10)
 
 ## Sources
 
 - README: https://github.com/logos-messaging/logos-delivery
+- Flake: https://github.com/logos-messaging/logos-delivery/blob/master/flake.nix
 - CI: GitHub Actions (https://github.com/logos-messaging/logos-delivery/actions)
 - Waku docs: https://docs.waku.org/

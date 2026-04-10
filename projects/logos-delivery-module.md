@@ -1,5 +1,5 @@
 ---
-tags: [project, logos-co, module, qt, delivery, blocked]
+tags: [project, logos-co, module, qt, delivery, ready]
 updated: 2026-04-10
 ---
 
@@ -8,11 +8,15 @@ updated: 2026-04-10
 **Organisation:** logos-co
 **Type:** Logos Core Qt plugin (module)
 **GitHub:** https://github.com/logos-co/logos-delivery-module
-**Last updated:** 2026-03-19
+**Last updated:** 2026-04-10
 
 ## Overview
 
 Wraps `liblogosdelivery` from [[logos-delivery]] as a Logos Core Qt plugin module. Provides high-level message delivery capabilities to any Logos Core application.
+
+**Status (2026-04-10): Confirmed ready to use by dev team.**
+
+> Note: The README contains an outdated warning about `liblogosdelivery.dylib` not being available. This is stale — the C FFI is available via `nix build github:logos-messaging/logos-delivery`.
 
 ## API Surface
 
@@ -38,22 +42,22 @@ Events emitted:
 | `twn` | RLN-protected Waku Network (cluster 1) |
 | `logos.dev` | Logos Dev Network (cluster 2, mix enabled, p2pReliability on, 8 auto-shards) |
 
-## Blocking Issue
+## Building
 
-**C FFI library not published:** The module compiles successfully but fails at the install phase because `liblogosdelivery.dylib` / `.so` is not yet exported from [[logos-delivery]].
+```bash
+# Build with Nix (recommended)
+nix build
 
-Fix required: Add C library export target to [[logos-delivery]] build system.
+# Build plugin only (requires liblogosdelivery at runtime)
+nix build '.#lib'
+```
 
-## Nix vs CMake
-
-- Default build: Nix only
-- `nix build '.#lib'` — plugin library only (still requires liblogosdelivery at runtime)
-- CMake build documented but requires environment variables pointing to SDKs
+Both libraries (`delivery_module_plugin` + `liblogosdelivery`) must remain in the same directory.
 
 ## Readiness
 
-**Status:** ⚠️ Blocked
-**Path to unblocked:** Publish `liblogosdelivery` from [[logos-delivery]]
+**Status:** Ready to use (2026-04-10 confirmation from dev team)
+**Pre-requisite:** `liblogosdelivery` available via `nix build github:logos-messaging/logos-delivery`
 
 ## Sources
 

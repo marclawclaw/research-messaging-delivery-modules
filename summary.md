@@ -8,7 +8,7 @@ updated: 2026-04-10
 ## Researched Repos
 
 **logos-co org:**
-- [[logos-delivery-module]] — Qt delivery module plugin (blocked)
+- [[logos-delivery-module]] — Qt delivery module plugin
 - [[logos-chat-legacy-module]] — legacy chat PoC module
 - [[logos-chat-ui]] — Qt chat UI application
 - [[logos-libp2p-module]] — libp2p networking module
@@ -21,34 +21,42 @@ updated: 2026-04-10
 - [[nim-sds]] — E2E reliability (Android + iOS builds)
 - libchat — Crypto layer (recently active)
 
-## Key Findings
+## Key Findings (Updated 2026-04-10)
 
-### Transport Layer: Production-Ready
-The Waku v2 core (`logos-delivery`, `logos-delivery-js`, `logos-delivery-go`) is solid, actively maintained, and production-grade. 240 stars on the Nim implementation, updated 2026-04-09.
+### Transport Layer: Production-Ready ✅
+The Waku v2 core (`logos-delivery`, `logos-delivery-js`, `logos-delivery-go`) is solid, actively maintained, and production-grade. 240 stars on the Nim implementation. Updated today.
 
-### Delivery Module: One Step from Unblocked
-The [[logos-delivery-module]] compiles but fails to install because `liblogosdelivery` (the C FFI library) is not yet published. Fixing this in [[logos-delivery]] is the single highest-leverage action.
+### Delivery Module: Ready to Use ✅
+**Updated:** The C FFI (`liblogosdelivery`) IS available via `nix build github:logos-messaging/logos-delivery`. The `logos-delivery-module` README contains a stale warning — this has been resolved. Confirmed by dev team 2026-04-10.
 
-### Chat UI: Two Blocking Issues
-1. `logos-chat-module` is not publicly listed in logos-co — required by [[logos-chat-ui]]
-2. Message persistence not implemented — all messages are ephemeral
-
-### Chat SDK: Preview Status
+### Chat SDK: Preview Status ⚠️
 [[logos-chat]] has a "Preview" project status badge. Not production-ready. Ephemeral messaging only.
+
+## Build Commands
+
+```bash
+# Transport layer C library
+nix build github:logos-messaging/logos-delivery
+
+# Delivery module plugin
+cd $LOGO_REPOS/logos-delivery-module
+nix build
+```
 
 ## High-Priority Gaps
 
-| Gap | Severity | Owner |
+| Gap | Severity | Notes |
 |-----|----------|-------|
-| C FFI export from [[logos-delivery]] | High | logos-messaging |
-| `logos-chat-module` public visibility | High | logos-co |
-| Message persistence (store protocol) | High | logos-messaging |
-| [[logos-chat]] project status: Preview → stable | Medium | logos-messaging |
+| Message persistence (store protocol) | High | Not yet implemented in chat SDK |
+| [[logos-chat]] project status: Preview → stable | Medium | Needed before production chat use |
+| `logos-chat-module` public visibility | Medium | Required by [[logos-chat-ui]] |
 
 ## Bottom Line
 
-If the goal is to ship a working delivery module for the LEZ, the path is clear and blocked by a single missing build step: add a C library export target to [[logos-delivery]], publish `liblogosdelivery`, and the [[logos-delivery-module]] should build end-to-end. The chat UI has deeper structural gaps that need more time.
+**Yes, you can start building using the Logos messaging/delivery module today.** The `logos-delivery-module` is ready to use. Build `liblogosdelivery` via Nix, then `nix build` the delivery module. The transport layer is production-grade and actively maintained.
+
+For the Qt plugin path: build the C FFI from `logos-delivery`, then build the delivery module plugin. The chat UI has additional gaps (message persistence, `logos-chat-module` visibility) that are separate concerns.
 
 ## Data Sources
 
-All facts verified against live GitHub API and README content fetched 2026-04-10.
+All facts verified against live GitHub API, README content, and `flake.nix` fetched 2026-04-10.
